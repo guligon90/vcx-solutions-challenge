@@ -9,8 +9,10 @@ from src.data_structures.exceptions import StackPopException
 
 class Stack(Generic[T]):
 
+    """Singly linked list implementation of a stack (LIFO) data structure."""
+
     def __init__(self, initial_stack: Union[T, Iterable[T]] = None) -> None:
-        """Initializes stack."""
+        """Initializing stack with a initial valid Iterable[T] or T, if informed."""
         self._length: int = 0
         self.head: Optional[Cell] = None
 

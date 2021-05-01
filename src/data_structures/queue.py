@@ -9,8 +9,10 @@ from src.data_structures.exceptions import QueueDequeueException
 
 class Queue(Generic[T]):
 
+    """Doubly linked list implementation of a queue (FIFO) data structure."""
+
     def __init__(self, initial_queue: Union[T, Iterable[T]] = None) -> None:
-        """Initializing queue."""
+        """Initializing queue with a initial valid Iterable[T] or T, if informed."""
         self._length: int = 0
         self.head: Optional[Cell] = Cell()
         self.tail: Cell = self.head
