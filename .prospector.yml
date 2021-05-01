@@ -1,0 +1,42 @@
+output-format: grouped
+
+strictness: veryhigh
+doc-warnings: true
+test-warnings: false
+max-line-length: 120
+
+ignore-paths:
+  - venv/
+
+frosted:
+  run: false
+
+mypy:
+  run: true
+  options:
+    ignore-missing-imports: true
+    follow-imports: skip
+
+pylint:
+  disable:
+    - bad-builtin
+    - invalid-name
+    - missing-docstring
+    - star-args
+    - too-few-public-methods
+
+pep8:
+  full: true
+  disable:
+    - E126
+
+pep257:
+  disable:
+    - D100
+    - D101
+    - D102
+    - D103
+    - D104
+    - D205
+    - D400
+    - D401
