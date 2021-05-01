@@ -1,0 +1,13 @@
+# IDE related
+.vscode/
+
+# Python related
+__pycache__
+.pytest_cache/
+.mypy_cache/
+venv/
+env/
+
+# Unit testing related
+.coverage
+cov.xml
