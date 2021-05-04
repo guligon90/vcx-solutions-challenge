@@ -5,3 +5,6 @@ mypy==0.812
 # Unit tests related
 pytest==6.2.3
 pytest-cov==2.11.1
+
+# Graphics related
+matplotlib==3.4.1
