@@ -13,12 +13,12 @@ def plot_time_ratios(
     problem_size: int,
     time_ratios: Dict[str, Union[str, List[Number]]],
     plot_title: str = "Execution time ratios' comparison.",
-    show_plot: bool = False,
+    show_plot: bool = False
 ) -> None:
     """Function that receives the time rations and plot then in a x-y graph."""
     img_file_path: Optional[str] = build_tc_plot_file_path(
-        str(time_ratios.get('data_struct_name')),
-        str(time_ratios.get('target_name')),
+        str(time_ratios['data_struct_name']),
+        str(time_ratios['target_name']),
         problem_size
     )
 
@@ -37,8 +37,8 @@ def plot_time_ratios(
             axis_handler.plot(
                 n_values,       # X axis
                 scaled_ratios,  # Y axis
-                TIME_COMPLEXITIES.get(func_name).get('plot_pattern'),
-                label=TIME_COMPLEXITIES.get(func_name).get('plot_label')
+                TIME_COMPLEXITIES[func_name]['plot_pattern'],
+                label=TIME_COMPLEXITIES[func_name]['plot_label']
             )
 
     # Setting axis labels
@@ -50,11 +50,11 @@ def plot_time_ratios(
 
     # Creating legend
     axis_handler.legend(
-        loc='upper right',
+        loc='lower right',
         shadow=True,
     )
 
-    plotter.ylim([0.0, 1.0])
+    plotter.ylim([0.0, 0.4])
 
     # Setting plot grid
     axis_handler.grid()

@@ -20,6 +20,7 @@ mypy:
 pylint:
   disable:
     - bad-builtin
+    - broad-except
     - invalid-name
     - missing-docstring
     - star-args
@@ -39,5 +40,6 @@ pep257:
     - D104
     - D205
     - D211
+    - D212
     - D400
     - D401
