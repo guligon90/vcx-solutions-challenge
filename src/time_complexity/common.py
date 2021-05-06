@@ -1,17 +1,18 @@
 # Base imports
 from math import log2 as log
-from typing import Callable, Dict, Union
+from typing import Callable, Dict, List, Union
 
 
 Number = Union[int, float]
 TimeComplexityItem = Dict[str, Union[str, Callable[[int, ], Number]]]
 TimeComplexitiesType = Dict[str, TimeComplexityItem]
+TimeRatioType = Dict[str, Union[str, List[Number]]]
 
 
 _poly_time: Callable[[int, int], Number] = lambda n, k: n ** k
 
 
-TIME_RATIO_SCALE_FACTOR = 1000
+TIME_RATIO_SCALE_FACTOR = 1e+6
 
 
 TIME_COMPLEXITIES: TimeComplexitiesType = {

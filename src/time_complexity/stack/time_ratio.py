@@ -1,34 +1,49 @@
 # Base imports
 from datetime import datetime
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 # Project imports
-from src.time_complexity.common import Number, TIME_COMPLEXITIES
 from src.data_structures.stack import Stack
+from src.parallel.common import get_cpu_count, ProcessPool, ProcessPoolType, set_low_priority_to_process
+from src.time_complexity.common import Number, TimeRatioType, TIME_COMPLEXITIES
 
 
-def _execute_problem(_size: int, _stack: Stack) -> Number:
+def _push_time_ratio_worker(arguments: List[Any]) -> Dict[str, List[Number]]:
+    """Worker function that is used by the process poll."""
+    ratios: List[Number] = []
+    start_time = datetime.now()
+    stack, problem_size, function = arguments
+
+    for size in range(1, problem_size + 1):
+        print(f'[{function}][{Stack.push.__name__}] size={size}')
+        duration: Number = 0
+
+        start = datetime.now()
+        for _ in range(1, size + 1):
+            stack.push(1)
+        duration = (datetime.now() - start).total_seconds()
+
+        stack.pop_all()
+
+        denominator = TIME_COMPLEXITIES[function]['function']
+        # ZeroDivisionError checking. log(n) is not defined at n=1
+        ratio: Number = duration / denominator(size) \
+            if callable(denominator) and denominator(size) != 0 else duration
+
+        ratios.append(ratio)
+
+    duration_in_secs = (datetime.now() - start_time).total_seconds()
+
+    print(f'\tdone in {duration_in_secs} seconds.')
+    return {function: ratios}
+
+
+def eval_push_time_ratios(problem_size: int = 3000) -> Optional[TimeRatioType]:
     """
-    Target problem.
+    Function that calculates the execution time ratios, for the different time complexities.
 
-    If in fact stack.push has O(1) complexity, this problem will have,
-    for each increased size, linear or O(n) complexity.
-    """
-    print(f'\rExecuting problem with size {_size}...', end='')
-
-    start = datetime.now()
-    for _ in range(1, _size + 1):
-        _stack.push(1)
-    duration: float = (datetime.now() - start).total_seconds()
-
-    return duration
-
-
-def eval_push_time_ratios(problem_size: int = 3000) -> Dict[str, Union[str, List[Number]]]:
-    """
-    Function that evaluates the time ratios for each complexity type.
-
-    The problem with variable size, executes repeatedly the stack.push()
+    Here, a process poll is created in order to speed up the process of generating
+    the lists of time ratios, for each time complexity.
     """
     stack: Stack = Stack()
 
@@ -36,26 +51,14 @@ def eval_push_time_ratios(problem_size: int = 3000) -> Dict[str, Union[str, List
         func_name: [] for func_name in TIME_COMPLEXITIES
     }
 
-    for function in TIME_COMPLEXITIES:
-        print(f'Evaluating now ratios for {function} time complexity:')
+    arguments: List[Any] = [
+        (stack, problem_size, function) for function in TIME_COMPLEXITIES
+    ]
 
-        ratios: List[Number] = []
-        start_time = datetime.now()
+    pool: ProcessPoolType = ProcessPool(get_cpu_count(), set_low_priority_to_process)
 
-        for size in range(1, problem_size + 1):
-            duration: Number = _execute_problem(size, stack)
-            denominator = TIME_COMPLEXITIES[function]['function']
-
-            # ZeroDivisionError checking. log(n) is not defined at n=1
-            ratio: Number = duration / denominator(size) \
-                if callable(denominator) and denominator(size) != 0 else duration
-
-            ratios.append(ratio)
-
-        time_ratios.update({function: ratios})
-        duration_in_secs = (datetime.now() - start_time).total_seconds()
-
-        print(f'\tdone in {duration_in_secs} seconds.')
+    for response in pool.imap(_push_time_ratio_worker, arguments):
+        time_ratios.update(response)
 
     time_ratios.update({
         'data_struct_name': Stack.__name__.lower(),
