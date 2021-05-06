@@ -82,3 +82,13 @@ class StackTestCase(unittest.TestCase):
         stack.push(2)
 
         assert repr(stack) == '2 -> 1 -> 3'
+
+    def test_pop_all(self):
+        tests = [1, '0', Stack, lambda x: x, {}, [], None]
+        stack = Stack(tests)
+
+        assert len(stack) == len(tests)
+
+        stack.pop_all()
+        
+        assert stack.is_empty() is True

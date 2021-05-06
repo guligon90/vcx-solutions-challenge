@@ -45,6 +45,13 @@ class Stack(Generic[T]):
 
         return data
 
+    def pop_all(self) -> None:
+        while True:
+            try:
+                self.pop()
+            except StackPopException:
+                break
+
     def is_empty(self) -> bool:
         """Indicates if the stack is empty."""
         return self.head is None
