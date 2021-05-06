@@ -16,13 +16,11 @@ def _push_time_ratio_worker(arguments: List[Any]) -> Dict[str, List[Number]]:
 
     for size in range(1, problem_size + 1):
         print(f'[{function}][{Stack.push.__name__}] size={size}')
+
         duration: Number = 0
-
         start = datetime.now()
-        for _ in range(1, size + 1):
-            stack.push(1)
+        stack.push(1)
         duration = (datetime.now() - start).total_seconds()
-
         stack.pop_all()
 
         denominator = TIME_COMPLEXITIES[function]['function']
@@ -42,7 +40,7 @@ def eval_push_time_ratios(problem_size: int = 3000) -> Optional[TimeRatioType]:
     """
     Function that calculates the execution time ratios, for the different time complexities.
 
-    Here, a process poll is created in order to speed up the process of generating
+    Here, a process pool is created in order to speed up the process of generating
     the lists of time ratios, for each time complexity.
     """
     stack: Stack = Stack()

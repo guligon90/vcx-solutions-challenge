@@ -15,7 +15,7 @@ def plot_time_ratios(
     plot_title: str = "Execution time ratios' comparison.",
     show_plot: bool = False
 ) -> None:
-    """Function that receives the time rations and plot then in a x-y graph."""
+    """Function that receives the time ratios and plot then in a x-y graph."""
     img_file_path: Optional[str] = build_tc_plot_file_path(
         str(time_ratios['data_struct_name']),
         str(time_ratios['target_name']),
@@ -28,7 +28,7 @@ def plot_time_ratios(
     figure_handler, axis_handler = plotter.subplots()
 
     for func_name, ratios in time_ratios.items():
-        # Plotting the rations as a function of n
+        # Plotting the ratios as a function of n
         if isinstance(ratios, list):
             scaled_ratios: List[Number] = [
                 ratio * TIME_RATIO_SCALE_FACTOR for ratio in ratios
@@ -50,7 +50,7 @@ def plot_time_ratios(
 
     # Creating legend
     axis_handler.legend(
-        loc='lower right',
+        loc='upper right',
         shadow=True,
     )
 
